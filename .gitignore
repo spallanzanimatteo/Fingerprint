@@ -1,0 +1,18 @@
+# exclude IDE configuration files
+/.idea
+
+# exclude external code
+/Python/misvm
+/MATLAB/*.exe
+/MATLAB/*.zip
+
+# exclude Python bytecode
+/**/__pycache__
+
+# distribute the data, but exclude trained models, results, and figures
+/Data/Toy*/Experiments
+/Data/Toy*/Figures
+
+# exclude company data
+/Data/TetraPak
+
