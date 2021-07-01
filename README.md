@@ -122,8 +122,8 @@ The code in the current repository is released under the [Apache 2.0 license](ht
 If you plan to integrate this code into your products, remember to consider also the licenses under which the dependencies are released.
 In particular:
 
-* `RMixtComp` is released under the [GNU Affero General Public License, version 3 (AGPLv3)](https://github.com/modal-inria/MixtComp/blob/master/LICENCE.md);
-* `misvm` is released under the [3-Clause BSD License](https://github.com/garydoranjr/misvm/blob/master/LICENSE);
+* MixtComp is released under the [GNU Affero General Public License, version 3 (AGPLv3)](https://github.com/modal-inria/MixtComp/blob/master/LICENCE.md);
+* MISVM is released under the [3-Clause BSD License](https://github.com/garydoranjr/misvm/blob/master/LICENSE);
 * GPDT is released under the [GPU General Public License, version 2 (GNU GPLv2)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html);
 * to probe the possibility of including SVM light in commercial products, you should contact its author at <a href="mailto:svm-light@ls8.cs.uni-dortmund.de"><svm-light@ls8.cs.uni-dortmund.de><a>;
 * MATLAB&copy; is proprietary software licensed by [MathWorks, Inc.](https://www.mathworks.com/)

@@ -1,8 +1,7 @@
 # exclude IDE configuration files
 /.idea
 
-# exclude external code
-/Python/misvm
+# exclude external SVM code
 /MATLAB/*.exe
 /MATLAB/*.zip
 
