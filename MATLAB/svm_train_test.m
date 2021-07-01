@@ -58,7 +58,7 @@ function [pr_y] = svm_train_test(x_train, y_train, x_test, y_test)
         if (n_C > 1) || (n_g > 1)
 
             fold_train_file = fullfile(buffer, 'fold_train_data');
-            fold_test_file = fullfile(buffer, 'fold_test_data');
+            fold_test_file  = fullfile(buffer, 'fold_test_data');
             fold_model_file = fullfile(buffer, 'fold_model');
             fold_preds_file = fullfile(buffer, 'fold_preds');
 
@@ -94,7 +94,7 @@ function [pr_y] = svm_train_test(x_train, y_train, x_test, y_test)
                         eval(['!gpdt -t 2 -g ' num2str(g_candidates(i_g)) ' -c ' num2str(C_candidates(i_C)) ' -m 400 -q 1000 -v 0 ' fold_train_file ' ' fold_model_file]);
 
                         % evaluate
-                        eval(['!gpdtclassify ' fold_test_file ' ' fold_model_file ' ' fold_preds_file]);
+                        eval(['!classify ' fold_test_file ' ' fold_model_file ' ' fold_preds_file]);
                         fold_preds = load(fold_preds_file);
                         err_cv(i_fold, i_C, i_g) = sum(abs(sign(fold_preds) - y_temp(fold_test_idx))) / 2;
 
@@ -158,7 +158,7 @@ function [pr_y] = svm_train_test(x_train, y_train, x_test, y_test)
         temp_preds_file = fullfile(buffer, strcat(['temp_preds_', num2str(class1), '_', num2str(class2)]));
 
         model_file = fullfile(buffer, strcat(['model_', num2str(class1), '_', num2str(class2)]));
-        eval(['!gpdtclassify ' temp_test_file ' ' model_file ' ' temp_preds_file]);
+        eval(['!classify ' temp_test_file ' ' model_file ' ' temp_preds_file]);
 
         preds(:, im) = sign(load(temp_preds_file));
         preds(preds(:, im) == 1, im) = class2;
