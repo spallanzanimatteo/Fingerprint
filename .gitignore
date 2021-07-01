@@ -3,6 +3,7 @@
 
 # exclude external SVM code
 /MATLAB/*.exe
+/MATLAB/FIM
 /MATLAB/*.zip
 
 # exclude Python bytecode

@@ -27,7 +27,6 @@ To guide you through the installation process, I will use the following conventi
 * `$`, shell prompt.
 
 I assume that you will clone the repo into your home directory:
-
 ```
 $ cd ~
 $ git clone https://github.com/spallanzanimatteo/Fingerprint
@@ -39,48 +38,43 @@ $ git submodule update --init
 ### Create an Anaconda environment and install other third-party software
 
 You can install most of the R and Python dependencies using [Anaconda](https://docs.anaconda.com/anaconda/install/index.html):
-
 ```
 $ conda env create -f fingerprint.yml
 ```
 
 After creating the environment, it is time to install third-party packages.
 To make them accessible from the newly-created Anaconda environment, be sure to activate it first:
-
 ```
 $ conda activate fingerprint
 ```
 
 To install the *mixture composer* (MixtComp) R package, launch an interactive R interpreter and download the package from a CRAN mirror:
-
 ```
-$ (fingerprint) R
-$ > install.packages('RMixtComp')
-$ q()
+(fingerprint) $ R
+(fingerprint) > install.packages('RMixtComp')
+(fingerprint) $ q()
 ```
 
 To install the *multiple-instance support vector machine* (MI-SVM) Python package, navigate to the `misvm` sub-module and run the Python setup script contained therein:
-
 ```
-$ (fingerprint) cd Python/misvm
-$ (fingerprint) python setup.py install
-$ (fingerprint) cd ../..
+(fingerprint) $ cd Python/misvm
+(fingerprint) $ python setup.py install
+(fingerprint) $ cd ../..
 ```
 
 
 ### Verify the installation
 
 To verify that the installation was performed correctly, try to run the experiments *suites*:
-
 ```
-$ (fingerprint) cd R
-$ (fingerprint) Rscript suite.R --data_set=Toy1 --data_type=mixed
-$ ...
-$ (fingerprint) cd ..
-$ (fingerprint) cd Python
-$ (fingerprint) python suite.py --data_set=Toy1 --data_type=mixed
-$ ...
-$ (fingerprint) cd ..
+(fingerprint) $ cd R
+(fingerprint) $ Rscript suite.R --data_set=Toy1 --data_type=mixed
+...
+(fingerprint) $ cd ..
+(fingerprint) $ cd Python
+(fingerprint) $ python suite.py --data_set=Toy1 --data_type=mixed
+...
+(fingerprint) $ cd ..
 ```
 
 
@@ -112,6 +106,76 @@ In case your machine is running Windows, we also ship the magical binaries with 
 We developed this project on a Windows system.
 I suppose that the installation procedure described in this section could work on UNIX systems as well, but since I have not yet found the time to test it thoroughly, I can not guarantee it.
 Therefore, the least that I can do is helping you in case you encounter issues when trying to install the repository on UNIX systems: feel free to write me an email.
+
+
+## Usage
+
+The code in this repository is meant to be used as a pipeline including three steps:
+
+* generation of a *toy data set*;
+* execution of *experiment suites* that apply several statistical and machine learning methods to the generated data set;
+* creation of *reports* including confusion matrices and barplots that show the performance of the various methods.
+
+
+### Creating a toy data set
+
+Copy the file `Data/config_template.json`
+```
+(fingerprint) $ cd Data
+(fingerprint) $ cp config_template.json config_[...].json
+```
+
+Here, `[...]` is a placeholder for the name of the folder that you would like to contain all the information about the data set and the experiments.
+You can chose it as you like (pay attention to name conflicts).
+
+Then, you can create the data set:
+```
+(fingerprint) $ python create_toy_data_set.py --config_file=config_[...].json
+```
+
+You can also normalise the numeric values so that the mean and standard deviation of each coordinate computed across the whole data set are zero and one, respectively:
+```
+(fingerprint) $ python create_toy_data_set.py --config_file=config_[...].json --normalise
+```
+
+When you are satisfied with the generated mixtures, you can save the mixed-type measurements to disk by re-issuing the command with the `--save` flag turned on:
+```
+(fingerprint) $ python create_toy_data_set.py --config_file=config_[...].json --normalise --save
+```
+
+
+### Running the experiment *suites*
+
+You can fit and test several statistical and machine learning models by running the R and Python *suite* scripts.
+You can fit the model just to the categorical components (`--data_type=categorical`), to the numerical components (`--data_type=numerical`) or to the mixed-type data:
+```
+(fingerprint) $ cd ../R
+(fingerprint) $ Rscript suite.R --data_set=[...] --data_type=mixed --save
+...
+(fingerprint) $ cd ../Python
+(fingerprint) $ python suite.py --data_set=[...] --data_type=mixed --save
+...
+(fingerprint) $ cd ..
+```
+
+**MATLAB**.
+To generate the results for SVM experiments, you need to use the `svm_main` function.
+Supposing that you have launched MATLAB and that its working directory is `Fingerprint/MATLAB`, issue
+```
+>>> svm_main('[...]', 'mixed', true)
+```
+
+If you want to apply SVMs to the one-hot-encoded categorical components or to the numerical components, just replace the `'mixed'` argument with the `'categorical'` or `'numerical'` arguments, respectively.
+
+
+### Compiling the experiment reports
+
+After you have run the experiments, it is time to compare their results.
+To generate the confusion matrices and draw barplots comparing the performance of all the methods, you can use the `compile_report.py` Python script:
+```
+(fingerprint) $ cd Data
+(fingerprint) $ python compile_report.py --data_set=[...] --data_type=mixed
+```
 
 
 ## Notice
