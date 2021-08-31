@@ -103,8 +103,10 @@ In case your machine is running Windows, we also ship the magical binaries with 
 
 ### Compatibility remarks
 
-We developed this project on a Windows system.
-I suppose that the installation procedure described in this section could work on UNIX systems as well, but since I have not yet found the time to test it thoroughly, I can not guarantee it.
+We developed this project on an HP 2017 OMEN PC equipped with a four-core Intel Core i7-7700HQ CPU running a 64-bit OS (Windows 10 Home).
+We pulled, installed, and tested this repository also on an Apple 2020 MacBook Air PC equipped with a four-core Intel Core i5-1030NG7 CPU running a 64-bit OS (macOS 11.1 Big Sur).
+
+I suppose that the installation procedure described in this section could work on other UNIX systems as well, but since I have not yet found the time to test it thoroughly, I can not guarantee it.
 Therefore, the least that I can do is helping you in case you encounter issues when trying to install the repository on UNIX systems: feel free to write me an email.
 
 
@@ -119,28 +121,31 @@ The code in this repository is meant to be used as a pipeline including three st
 
 ### Creating a toy data set
 
-Copy the file `Data/config_template.json`
-```
-(fingerprint) $ cd Data
-(fingerprint) $ cp config_template.json config_[...].json
-```
+To create a data set, follow this procedure:
 
-Here, `[...]` is a placeholder for the name of the folder that you would like to contain all the information about the data set and the experiments.
-You can chose it as you like (pay attention to name conflicts).
+1. choose a name for your data set, for example `ToyDataSet`;
+2. navigate to the `Data` folder and copy the generic configuration file `Data/config_template.json` into a specific configuration file:
+   ```
+   $ (fingerprint) cd Data
+   $ (fingerprint) cp config_template.json config_ToyDataSet.json
+   ```
+   note that the `config_template.json` file should not be modified;
+   also note that the suffix to `config_` (i.e., the name that you chose for your data set) will be the name of the folder containing your data set, therefore be sure that it will not collide with the names of other sub-folders of `Data`;
+3. set the parameters of the generative model by editing `Data/config_ToyDataSet.json`; we explain the purpose of each parameter in the appropriate section of the documentation;
+4. create the data set:
+   ```
+   $ (fingerprint) python create_toy_data_set.py --config_file=config_ToyDataSet.json --save
+   ```
+   this action will create a sub-folder `ToyDataSet` nested under `Data`, write the data to an Excel file `ToyDataSet/data_set.xlsx`, and finally move the configuration file `config_ToyDataSet.json` into the newly-created folder;
+   you also have the option to normalise the data set in such a way that the uni-variate distributions of the numerical components have zero mean and unit variance:
+   ```
+   $ (fingerprint) python create_toy_data_set.py --config_file=config_ToyDataSet.json --normalise --save
+   ```
 
-Then, you can create the data set:
+For two- and three-dimensional numerical data points, the generating script also draws scatterplots of the point clouds; you can use this functionality to save your data set only when you are satisfied by what you see in the rendering.
+To avoid saving the data set, just issue the creation command without the `save` flag:
 ```
-(fingerprint) $ python create_toy_data_set.py --config_file=config_[...].json
-```
-
-You can also normalise the numeric values so that the mean and standard deviation of each coordinate computed across the whole data set are zero and one, respectively:
-```
-(fingerprint) $ python create_toy_data_set.py --config_file=config_[...].json --normalise
-```
-
-When you are satisfied with the generated mixtures, you can save the mixed-type measurements to disk by re-issuing the command with the `--save` flag turned on:
-```
-(fingerprint) $ python create_toy_data_set.py --config_file=config_[...].json --normalise --save
+$ (fingerprint) python create_toy_data_set.py --config_file=config_ToyDataSet.json
 ```
 
 
